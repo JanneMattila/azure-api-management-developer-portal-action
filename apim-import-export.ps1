@@ -166,8 +166,9 @@ function Export-APIMDeveloperPortal (
 
     "Exporting Azure API Management Developer portal content to: $ExportFolder"
     $mediaFolder = Join-Path -Path $ExportFolder -ChildPath "Media"
-    mkdir $ExportFolder -Force
-    mkdir $mediaFolder -Force
+    
+    New-Item -ItemType "Directory" -Path $ExportFolder -Force
+    New-Item -ItemType "Directory" -Path $mediaFolder -Force
 
     $ctx = Get-AzContext
     $ctx.Subscription.Id
