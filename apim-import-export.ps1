@@ -246,4 +246,4 @@ else {
 }
 
 
-"::set-output name=path::$($Folder)"
+"::set-output name=folder::$($Folder)"

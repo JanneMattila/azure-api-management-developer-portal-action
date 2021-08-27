@@ -22,6 +22,7 @@ inputs:
 outputs:
   folder:
     description: "Folder used for storing the developer portal content"
+    value: ${{ steps.apim.outputs.folder }}
 
 runs:
   using: "composite"
