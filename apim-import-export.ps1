@@ -241,7 +241,7 @@ else {
     Export-APIMDeveloperPortal `
         -ResourceGroupName $ResourceGroupName `
         -APIMName $APIMName `
-        -ImportFolder $Folder 
+        -ExportFolder $Folder 
 }
 
 
