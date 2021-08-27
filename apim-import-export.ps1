@@ -20,8 +20,8 @@ Import-APIMDeveloperPortal (
     [Parameter(Mandatory = $true, HelpMessage = "API Management Name")] 
     [string] $APIMName,
 
-    [Parameter(HelpMessage = "Import folder")] 
-    [string] $ImportFolder = "$PSScriptRoot\Import"
+    [Parameter(Mandatory = $true, HelpMessage = "Import folder")] 
+    [string] $ImportFolder
 )
 {
     $ErrorActionPreference = "Stop"
@@ -123,7 +123,7 @@ Import-APIMDeveloperPortal (
     }
 
     "Uploading files"
-    $stringIndex = ($mediaFolder + "\").Length
+    $stringIndex = ($mediaFolder + [System.IO.Path]::DirectorySeparatorChar).Length
     Get-ChildItem -File -Recurse $mediaFolder `
     | ForEach-Object { 
         $name = $_.FullName.Substring($stringIndex)
@@ -158,8 +158,8 @@ Export-APIMDeveloperPortal (
     [Parameter(Mandatory = $true, HelpMessage = "API Management Name")] 
     [string] $APIMName,
 
-    [Parameter(HelpMessage = "Export folder")] 
-    [string] $ExportFolder = "$PSScriptRoot\Export"
+    [Parameter(Mandatory = $true, HelpMessage = "Export folder")] 
+    [string] $ExportFolder
 )
 {
     $ErrorActionPreference = "Stop"
@@ -188,7 +188,7 @@ Export-APIMDeveloperPortal (
     }
 
     $contentItems
-    $contentItems | ConvertTo-Json -Depth 100 | Out-File -FilePath "$ExportFolder\data.json"
+    $contentItems | ConvertTo-Json -Depth 100 | Out-File -FilePath (Join-Path -Path $ExportFolder -ChildPath "data.json")
 
     $storage = (Invoke-AzRestMethod -Path "$baseUri/portalSettings/mediaContent/listSecrets?api-version=2019-12-01" -Method POST).Content | ConvertFrom-Json
     $containerSasUrl = [System.Uri] $storage.containerSasUrl
@@ -220,6 +220,28 @@ Export-APIMDeveloperPortal (
 
     "Downloaded $totalFiles files from container $contentContainer"
     "Export completed"
+}
+
+if ([string]::IsNullOrEmpty($Folder))
+{
+    # Let's create temporary folder for the content
+    $Folder = Join-Path $Env:Temp "apim-export"
+}
+
+"Running $Direction for $APIMName in $ResourceGroupName using folder $Folder."
+
+if ($Direction -eq "Import")
+{
+    Import-APIMDeveloperPortal `
+        -ResourceGroupName $ResourceGroupName `
+        -APIMName $APIMName `
+        -ImportFolder $Folder
+}
+else {
+    Export-APIMDeveloperPortal `
+        -ResourceGroupName $ResourceGroupName `
+        -APIMName $APIMName `
+        -ImportFolder $Folder 
 }
 
 

@@ -12,15 +12,23 @@ content between jobs.
 
 ```yml
 #...
-    - name: Upload developer portal as artifact
+    - uses: azure/login@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+
+    - id: apim-export
+      name: Export developer portal content
       uses: jannemattila/azure-api-management-developer-portal-action@main
       with:
-        name: portal
+        apimName: contoso # Your Azure API Management instance name
+        resourceGroup: apim-dev-rg # Name of the resource group
+        direction: Export # Export or Import
+        folder: somepath # (optional) Folder used for storing the developer portal content
 
-    - name: Upload developer portal as artifact
+    - name: Upload developer portal content as artifact
       uses: actions/upload-artifact@v2.2.4
       with:
         name: portal
-        path: 
+        path: ${{ steps.apim-export.outputs.folder }}
         if-no-files-found: error
 ```
