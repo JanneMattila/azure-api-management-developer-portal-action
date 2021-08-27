@@ -6,6 +6,10 @@ that handle the developer portal content import and export functionality.
 
 ## Examples
 
+You need to authenticate with Azure before you can use this task in your workflow.
+Follow these [instructions](https://github.com/Azure/login) on how to
+use `azure/login` task.
+
 You can combine these actions with `actions/upload-artifact` and
 `actions/download-artifact` actions for easier moving the developer portal
 content between jobs.
@@ -15,6 +19,7 @@ content between jobs.
     - uses: azure/login@v1
       with:
         creds: '${{ secrets.AZURE_CREDENTIALS }}'
+        enable-AzPSSession: true
 
     - id: apim-export
       name: Export developer portal content

@@ -17,6 +17,7 @@ inputs:
     required: true
   folder:
     description: "Folder used for storing the developer portal content. If none provided, then temporary folder will be used."
+    default: ""
 
 outputs:
   folder:
