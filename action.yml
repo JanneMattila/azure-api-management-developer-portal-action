@@ -1,0 +1,37 @@
+name: "Import and export Azure API Management Developer Portal"
+description: "GitHub Action for importing and exporting Azure API Management Developer Portal content"
+
+branding:
+  icon: "download-cloud"  
+  color: "blue"
+
+inputs:
+  apimName:
+    description: "Azure API Management Name"
+    required: true
+  resourceGroup:
+    description: "Resource group of Azure API MAnagement"
+    required: true
+  direction:
+    description: "Direction of transfer either 'Import' or 'Export'"
+    required: true
+  folder:
+    description: "Folder used for storing the developer portal content. If none provided, then temporary folder will be used."
+
+outputs:
+  folder:
+    description: "Version number parsed from GitHub release tag name"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run Azure PowerShell script
+      uses: azure/powershell@v1
+      with:
+        azPSVersion: '6.3.0'
+        inlineScript: |
+          ${{ github.action_path }}/apim-import-export.ps1 `
+            -APIMName ${{ inputs.apimName }} `
+            -ResourceGroupName ${{ inputs.resourceGroup }} `
+            -Direction ${{ inputs.direction }} `
+            -Folder ${{ inputs.folder }}
