@@ -60,8 +60,8 @@ actions for moving the developer portal content between jobs.
         name: Import developer portal content
         uses: jannemattila/azure-api-management-developer-portal-action@v1
         with:
-          apimName: ${{ secrets.APIM }} # Your Azure API Management instance name
-          resourceGroup: ${{ secrets.APIM_RG }} # Name of the resource group
+          apimName: contoso # Your Azure API Management instance name
+          resourceGroup: apim-dev-rg # Name of the resource group
           direction: Import # Import to this instance
           folder: portal
 ```
