@@ -13,7 +13,7 @@ Param (
     [string] $Folder
 )
 
-Import-APIMDeveloperPortal (
+function Import-APIMDeveloperPortal (
     [Parameter(Mandatory = $true, HelpMessage = "Resource group of API MAnagement")] 
     [string] $ResourceGroupName,
 
@@ -151,7 +151,7 @@ Import-APIMDeveloperPortal (
     throw "Could not publish developer portal"
 }
 
-Export-APIMDeveloperPortal (
+function Export-APIMDeveloperPortal (
     [Parameter(Mandatory = $true, HelpMessage = "Resource group of API MAnagement")] 
     [string] $ResourceGroupName,
 
