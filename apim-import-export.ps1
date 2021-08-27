@@ -225,7 +225,7 @@ function Export-APIMDeveloperPortal (
 if ([string]::IsNullOrEmpty($Folder))
 {
     # Let's create temporary folder for the content
-    $Folder = Join-Path $Env:Temp "apim-export"
+    $Folder = Join-Path $env:RUNNER_TEMP "apim-export"
 }
 
 "Running $Direction for $APIMName in $ResourceGroupName using folder $Folder."
