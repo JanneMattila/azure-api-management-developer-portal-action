@@ -37,4 +37,4 @@ runs:
             -APIMName ${{ inputs.apimName }} `
             -ResourceGroupName ${{ inputs.resourceGroup }} `
             -Direction ${{ inputs.direction }} `
-            -Folder ${{ inputs.folder }}
+            -Folder "${{ inputs.folder }}"
