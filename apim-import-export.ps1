@@ -9,7 +9,7 @@ Param (
     [Parameter(Mandatory = $true, HelpMessage = "Azure API Management Name")] 
     [string] $APIMName,
 
-    [Parameter(Mandatory = $true, HelpMessage = "Folder used for storing the developer portal content")] 
+    [Parameter(HelpMessage = "Folder used for storing the developer portal content")] 
     [string] $Folder
 )
 
