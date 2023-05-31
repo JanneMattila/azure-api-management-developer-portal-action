@@ -26,7 +26,7 @@ actions for moving the developer portal content between jobs.
 
     - id: apim-export
       name: Export developer portal content
-      uses: jannemattila/azure-api-management-developer-portal-action@v1
+      uses: jannemattila/azure-api-management-developer-portal-action@v2
       with:
         apimName: contoso # Your Azure API Management instance name
         resourceGroup: apim-dev-rg # Name of the resource group
@@ -58,7 +58,7 @@ actions for moving the developer portal content between jobs.
 
       - id: apim-import
         name: Import developer portal content
-        uses: jannemattila/azure-api-management-developer-portal-action@v1
+        uses: jannemattila/azure-api-management-developer-portal-action@v2
         with:
           apimName: contoso # Your Azure API Management instance name
           resourceGroup: apim-dev-rg # Name of the resource group
@@ -88,7 +88,7 @@ jobs:
         
     - id: apim-export
       name: Export developer portal content
-      uses: jannemattila/azure-api-management-developer-portal-action@v1
+      uses: jannemattila/azure-api-management-developer-portal-action@v2
       with:
         apimName: ${{ secrets.APIM_TEST }} # Your test Azure API Management instance name
         resourceGroup: ${{ secrets.APIM_TEST_RG }} # Name of the resource group
@@ -118,7 +118,7 @@ jobs:
 
       - id: apim-import
         name: Import developer portal content
-        uses: jannemattila/azure-api-management-developer-portal-action@v1
+        uses: jannemattila/azure-api-management-developer-portal-action@v2
         with:
           apimName: ${{ secrets.APIM_PROD }} # Your production Azure API Management instance name
           resourceGroup: ${{ secrets.APIM_PROD_RG }} # Name of the production resource group
