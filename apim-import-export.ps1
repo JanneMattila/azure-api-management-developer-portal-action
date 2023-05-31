@@ -22,24 +22,25 @@ function Import-APIMDeveloperPortal (
 
     [Parameter(Mandatory = $true, HelpMessage = "Import folder")] 
     [string] $ImportFolder
-)
-{
+) {
     $ErrorActionPreference = "Stop"
 
     "Importing Azure API Management Developer portal content from: $ImportFolder"
-    $mediaFolder = (Resolve-Path (Join-Path -Path $ImportFolder -ChildPath "Media")).Path
+    $ImportFolder = (Resolve-Path $ImportFolder).Path
+    $mediaFolder = Join-Path -Path $ImportFolder -ChildPath "Media"
     $dataFile = Join-Path -Path $ImportFolder -ChildPath "data.json"
 
     if ($false -eq (Test-Path $ImportFolder)) {
         throw "Import folder path was not found: $ImportFolder"
     }
 
-    if ($false -eq (Test-Path $mediaFolder)) {
-        throw "Media folder path was not found: $mediaFolder"
-    }
-
     if ($false -eq (Test-Path $dataFile)) {
         throw "Data file was not found: $dataFile"
+    }
+
+    if (-not (Test-Path -Path $mediaFolder)) {
+        New-Item -ItemType "Directory" -Path $mediaFolder -Force
+        Write-Warning "Media folder $mediaFolder was not found but it was created."
     }
 
     "Reading $dataFile"
@@ -160,8 +161,7 @@ function Export-APIMDeveloperPortal (
 
     [Parameter(Mandatory = $true, HelpMessage = "Export folder")] 
     [string] $ExportFolder
-)
-{
+) {
     $ErrorActionPreference = "Stop"
 
     "Exporting Azure API Management Developer portal content to: $ExportFolder"
@@ -212,7 +212,12 @@ function Export-APIMDeveloperPortal (
         }
 
         foreach ($blob in $blobs) {
-            Get-AzStorageBlobContent -Blob $blob.Name -Container $contentContainer -Destination (Join-Path -Path $mediaFolder -ChildPath $blob.Name)
+            $targetFile = Join-Path -Path $mediaFolder -ChildPath $blob.Name
+            $targetFolder = Split-Path -Path $targetFile -Parent
+            if (-not (Test-Path -Path $targetFolder)) {
+                New-Item -ItemType "Directory" -Path $targetFolder -Force
+            }
+            Get-AzStorageBlobContent -Blob $blob.Name -Container $contentContainer -Destination $targetFile
         }
     
         $continuationToken = $blobs[$blobs.Count - 1].ContinuationToken;
@@ -223,16 +228,14 @@ function Export-APIMDeveloperPortal (
     "Export completed"
 }
 
-if ([string]::IsNullOrEmpty($Folder))
-{
+if ([string]::IsNullOrEmpty($Folder)) {
     # Let's create temporary folder for the content
     $Folder = Join-Path $env:RUNNER_TEMP "apim-export"
 }
 
 "Running $Direction for $APIMName in $ResourceGroupName using folder $Folder."
 
-if ($Direction -eq "Import")
-{
+if ($Direction -eq "Import") {
     Import-APIMDeveloperPortal `
         -ResourceGroupName $ResourceGroupName `
         -APIMName $APIMName `
